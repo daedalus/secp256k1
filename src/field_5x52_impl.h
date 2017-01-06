@@ -125,18 +125,49 @@ void static secp256k1_fe_set_b32(secp256k1_fe_t *r, const unsigned char *a) {
 
 /** Convert a field element to a 32-byte big endian value. Requires the input to be normalized */
 void static secp256k1_fe_get_b32(unsigned char *r, const secp256k1_fe_t *a) {
-#ifdef VERIFY
-    assert(a->normalized);
-#endif
-    for (int i=0; i<32; i++) {
-        int c = 0;
-        for (int j=0; j<2; j++) {
-            int limb = (8*i+4*j)/52;
-            int shift = (8*i+4*j)%52;
-            c |= ((a->n[limb] >> shift) & 0xF) << (4 * j);
-        }
-        r[31-i] = c;
-    }
+  r[31] = a->n[0] & 0xFF; // i = 0
+
+  r[30] = (a->n[0] >> 8)  & 0xFF; // i = 1
+  r[29] = (a->n[0] >> 16) & 0xFF; // i = 2
+  r[28] = (a->n[0] >> 24) & 0xFF; // i = 3
+  r[27] = (a->n[0] >> 32) & 0xFF; // i = 4
+  r[26] = (a->n[0] >> 40) & 0xFF; // i = 5
+
+  r[25] = ((a->n[0] >> 48) & 0xF) // i = 6
+        | ((a->n[1] & 0xF) << 4);
+
+  r[24] = (a->n[1] >> 4)  & 0xFF; // i = 7
+  r[23] = (a->n[1] >> 12) & 0xFF; // i = 8
+  r[22] = (a->n[1] >> 20) & 0xFF; // i = 9
+  r[21] = (a->n[1] >> 28) & 0xFF; // i = 10
+  r[20] = (a->n[1] >> 36) & 0xFF; // i = 11
+  r[19] = (a->n[1] >> 44) & 0xFF; // i = 12
+
+  r[18] = a->n[2] & 0xFF; // i = 13
+
+  r[17] = (a->n[2] >> 8)  & 0xFF; // i = 14
+  r[16] = (a->n[2] >> 16) & 0xFF; // i = 15
+  r[15] = (a->n[2] >> 24) & 0xFF; // i = 16
+  r[14] = (a->n[2] >> 32) & 0xFF; // i = 17
+  r[13] = (a->n[2] >> 40) & 0xFF; // i = 18
+
+  r[12] = ((a->n[2] >> 48) & 0xF) // i = 19
+        | ((a->n[3] & 0xF) << 4);
+
+  r[11] = (a->n[3] >> 4)  & 0xFF; // i = 20
+  r[10] = (a->n[3] >> 12) & 0xFF; // i = 21
+  r[9]  = (a->n[3] >> 20) & 0xFF; // i = 22
+  r[8]  = (a->n[3] >> 28) & 0xFF; // i = 23
+  r[7]  = (a->n[3] >> 36) & 0xFF; // i = 24
+  r[6]  = (a->n[3] >> 44) & 0xFF; // i = 25
+
+  r[5] = a->n[4] & 0xFF; // i = 26
+
+  r[4] = (a->n[4] >> 8)  & 0xFF; // i = 27
+  r[3] = (a->n[4] >> 16) & 0xFF; // i = 28
+  r[2] = (a->n[4] >> 24) & 0xFF; // i = 29
+  r[1] = (a->n[4] >> 32) & 0xFF; // i = 30
+  r[0] = (a->n[4] >> 40) & 0xFF; // i = 31
 }
 
 void static inline secp256k1_fe_negate(secp256k1_fe_t *r, const secp256k1_fe_t *a, int m) {
