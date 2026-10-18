@@ -4,8 +4,8 @@
  * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
-#ifndef _SECP256K1_FIELD_INNER5X52_IMPL_H_
-#define _SECP256K1_FIELD_INNER5X52_IMPL_H_
+#ifndef _SECP256K1_FIELD_INNER5X52_INT128_IMPL_H_
+#define _SECP256K1_FIELD_INNER5X52_INT128_IMPL_H_
 
 #include <stdint.h>
 
@@ -15,6 +15,8 @@
 #define VERIFY_BITS(x, n) do { } while(0)
 #endif
 
+#ifndef SECP256K1_FE_MUL_INNER_IMPLEMENTED
+#define SECP256K1_FE_MUL_INNER_IMPLEMENTED
 SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t *a, const uint64_t * SECP256K1_RESTRICT b) {
     uint128_t c, d;
     uint64_t t3, t4, tx, u0;
@@ -151,7 +153,10 @@ SECP256K1_INLINE static void secp256k1_fe_mul_inner(uint64_t *r, const uint64_t 
     VERIFY_BITS(r[4], 49);
     /* [r4 r3 r2 r1 r0] = [p8 p7 p6 p5 p4 p3 p2 p1 p0] */
 }
+#endif /* SECP256K1_FE_MUL_INNER_IMPLEMENTED */
 
+#ifndef SECP256K1_FE_SQR_INNER_IMPLEMENTED
+#define SECP256K1_FE_SQR_INNER_IMPLEMENTED
 SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t *a) {
     uint128_t c, d;
     uint64_t a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3], a4 = a[4];
@@ -273,5 +278,6 @@ SECP256K1_INLINE static void secp256k1_fe_sqr_inner(uint64_t *r, const uint64_t 
     VERIFY_BITS(r[4], 49);
     /* [r4 r3 r2 r1 r0] = [p8 p7 p6 p5 p4 p3 p2 p1 p0] */
 }
+#endif /* SECP256K1_FE_SQR_INNER_IMPLEMENTED */
 
 #endif
